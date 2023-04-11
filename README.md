@@ -1,6 +1,6 @@
 ## NLP Transformers with Python (Udemy course)
 
-Foolowing is covered:
+Following is covered:
 
 - Attention mechanism
 - HuggingFace's Transformers
