@@ -1,0 +1,7 @@
+data:
+  train_data_path: '/Users/zulikahlatief/Desktop/personal/NLP/Project1: Sentimental analysis/data/train.tsv'
+
+preprocess:
+  preprocess_plot_path: '/Users/zulikahlatief/Desktop/personal/NLP/Project1: Sentimental analysis/results/class_distribution.png'
+  seq_len: 512
+
