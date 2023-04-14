@@ -64,7 +64,7 @@ def train(config_path: Text) -> None:
     bert = TFAutoModel.from_pretrained('bert-base-cased')
     print('Summary of the native pre-trained BERT model (without any adjustments made to the architecture): ', bert.summary())
 
-    """Now we need to define the frame around Bert, we need:
+    """Define architecture around the BERT, as follows:
     - Two input layers (one for input IDs and one for attention mask).
     - A post-bert dropout layer to reduce the likelihood of overfitting and improve generalization.
     - Max pooling layer to convert the 3D tensors output by Bert to 2D.
@@ -89,9 +89,21 @@ def train(config_path: Text) -> None:
     print('Architecture of the bert model', model.summary())
 
     #initialise training paramters and optimizers
-    optimizer = tf.keras.optimizers.Adam()
+    optimizer = tf.keras.optimizers.Adam(lr=1e-5)
+    loss = tf.keras.losses.CategoricalCrossentropy()
+    acc = tf.keras.metrics.CategoricalAccuracy('accuracy')
+    model.compile(optimizer=optimizer, loss=loss, metrics=[acc])
 
+    ##train model using train and validation tensors
+    # load the training and validation sets
+    train_ds = tf.data.experimental.load('/Users/zulikahlatief/Desktop/personal/NLP/Project1: Sentimental analysis/data/train', element_spec=train_ds.element_spec)
+    val_ds = tf.data.experimental.load('/Users/zulikahlatief/Desktop/personal/NLP/Project1: Sentimental analysis/data/val', element_spec=train_ds.element_spec)
 
+    # view the input format
+    print('Input format of the model: ', train_ds.take(1))
+
+    history = model.fit(train_ds, validation_data=val_ds,epochs=1)
+    model.save('/Users/zulikahlatief/Desktop/personal/NLP/Project1: Sentimental analysis/results/sentiment_model')
 
 #to run from CLI use a constructer that allows to parse config file as an argument to the data_load function
 if __name__ == '__main__':
