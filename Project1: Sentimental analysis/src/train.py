@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 from transformers import BertTokenizer
 import seaborn as sns
 import tensorflow as tf
+from transformers import TFAutoModel
 
 def train(config_path: Text) -> None:
     with open("params.yaml") as config_file:
@@ -32,8 +33,64 @@ def train(config_path: Text) -> None:
 
     # then we use the dataset map method to apply this transformation
     dataset = dataset.map(map_func)
-
     print('TF object after splitting input and output tensors: ', dataset.take(1))
+
+    #create batches and shuffle data
+    batch_size = config['train']['batch_size']
+    dataset = dataset.shuffle(10000).batch(batch_size, drop_remainder=True)
+    dataset.take(1)
+
+    #split data into training and validation sets using take and skip methods. Creating a 90-10 split
+    split = config['train']['split']
+    size = int((Xids.shape[0] / batch_size) * split)
+    print('Performing 90 by 10 split! The training data shape is: ', size)
+
+    #create train and validation set
+    train_ds = dataset.take(size)
+    val_ds = dataset.skip(size)
+
+    #free up space
+    del dataset
+
+    #save train and validation sets
+    tf.data.experimental.save(train_ds, '/Users/zulikahlatief/Desktop/personal/NLP/Project1: Sentimental analysis/data/train')
+    tf.data.experimental.save(val_ds, '/Users/zulikahlatief/Desktop/personal/NLP/Project1: Sentimental analysis/data/val')
+
+    #toload the train and val set we need the element spec of the sets. This signifies the shape and format of the tensors
+    print('The element spec of the train and validation set: ', train_ds.element_spec)
+
+    ##Building the model
+    # initialize the Bert model, loaded as a pretrained model from transformers
+    bert = TFAutoModel.from_pretrained('bert-base-cased')
+    print('Summary of the native pre-trained BERT model (without any adjustments made to the architecture): ', bert.summary())
+
+    """Now we need to define the frame around Bert, we need:
+    - Two input layers (one for input IDs and one for attention mask).
+    - A post-bert dropout layer to reduce the likelihood of overfitting and improve generalization.
+    - Max pooling layer to convert the 3D tensors output by Bert to 2D.
+    - Final output activations using softmax for outputting categorical probabilities."""
+
+    #define model architecture
+    # two input layers, we ensure layer name variables match to dictionary keys in TF dataset
+    input_ids = tf.keras.layers.Input(shape=(512,), name='input_ids', dtype='int32')
+    mask = tf.keras.layers.Input(shape=(512,), name='attention_mask', dtype='int32')
+
+    #embedding layer
+    embeddings = bert.bert(input_ids, attention_mask = mask)[1]  #access final activations (alread max-pooled) [1]
+
+    #convert bert embeddings into 5 output classes
+    x =tf.keras.layers.Dense(1024, activation='relu')(embeddings)
+    y = tf.keras.layers.Dense(5, activation='softmax', name='outputs')(x)
+
+    #define our model
+    model = tf.keras.Model(inputs=[input_ids, mask], outputs=y)
+    #freeze the Bert layer because Bert is already highly trained, and contains huge number of parameters (computation and time needed exhausting)
+    model.layers[2].trainable = False
+    print('Architecture of the bert model', model.summary())
+
+    #initialise training paramters and optimizers
+    optimizer = tf.keras.optimizers.Adam()
+
 
 
 #to run from CLI use a constructer that allows to parse config file as an argument to the data_load function
