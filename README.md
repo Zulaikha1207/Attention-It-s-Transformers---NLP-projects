@@ -1,6 +1,6 @@
-## [NLP Transformers with Python] (https://ibm-learning.udemy.com/course/nlp-with-transformers/learn/lecture/26466724#overview)
+## NLP Transformers with Python
 
-Transformer models are the de-facto standard in modern NLP. They have proven themselves as the most expressive, powerful models for language by a large margin, beating all major language-based benchmarks time and time again. 
+Transformer models are the de-facto standard in modern NLP. They have proven themselves as the most expressive, powerful models for language by a large margin, beating all major language-based benchmarks time and time again. This repo covers content from a Udemy course, which you can access [here] ((https://ibm-learning.udemy.com/course/nlp-with-transformers/learn/lecture/26466724#overview)).
 
 This repo consists of projects using key NLP frameworks such as:
 
