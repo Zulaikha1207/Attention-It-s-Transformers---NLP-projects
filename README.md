@@ -1,8 +1,8 @@
-## NLP Transformers with Python (Udemy course)
+## [NLP Transformers with Python] (https://ibm-learning.udemy.com/course/nlp-with-transformers/learn/lecture/26466724#overview)
 
-Transformer models are the de-facto standard in modern NLP. They have proven themselves as the most expressive, powerful models for language by a large margin, beating all major language-based benchmarks time and time again. In this course, we cover everything you need to get started with building cutting-edge performance NLP applications using transformer models like Google AI's BERT, or Facebook AI's DPR.
+Transformer models are the de-facto standard in modern NLP. They have proven themselves as the most expressive, powerful models for language by a large margin, beating all major language-based benchmarks time and time again. 
 
-We cover several key NLP frameworks including:
+This repo consists of projects using key NLP frameworks such as:
 
 - HuggingFace's Transformers
 - TensorFlow 2
@@ -11,29 +11,18 @@ We cover several key NLP frameworks including:
 - NLTK
 - Flair
 
-And learn how to apply transformers to some of the most popular NLP use-cases:
+Projects on NLP use-cases:
 
 - Language classification/sentiment analysis
 - Named entity recognition (NER)
 - Question and Answering
 - Similarity/comparative learning
 
-Throughout each of these use-cases we work through a variety of examples to ensure that what, how, and why transformers are so important. Alongside these sections we also work through two full-size NLP projects, one for sentiment analysis of financial Reddit data, and another covering a fully-fledged open domain question-answering application.
+The project1 is a sentimental analysis classifier using Transformers and TensforFlow. This projects runs through the standard steps required to build a NLP model, namely, :
 
-All of this is supported by several other sections that encourage us to learn how to better design, implement, and measure the performance of our models, such as:
+- Data preprocessing: Getting data from the Kaggle API, transform data to preprare it for sentimental analysis and tokenization
+- Tf input pipeline: Build dataset (shuffle, batch, split data) for tensorflow
+- Modellng and training: Initialise BERT model and define the architecture (the inpout layers, mask layer, embedding layers, output layer shapes, max pooling, activation layer, etc), set up the optimizer, loss function and evaluation metric. Train and save the model
+- Getting predictions: Load the trained model, tokenise test data and make predictions
 
-- History of NLP and where transformers come from
-
-- Common preprocessing techniques for NLP
-
-- The theory behind transformers
-
-- How to fine-tune transformers
-
-We cover all this and more, I look forward to seeing you in the course!
-
-Following projects are built:
-- Language classification/sentiment analysis
-- Named entity recognition (NER)
-- Question and Answering
-- Similarity/comparative learning
+The Named Entity Recognition (NER) folder is an introduction to NER using spaCy, pulling stock data using Reddit API, extracting entities (organizations) from data and more.
